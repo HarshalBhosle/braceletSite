@@ -1,0 +1,15 @@
+# Add image files here for the 9 bracelets.
+# Put the image files in the folder: bracelets/static/bracelets/images/
+# Use the exact bracelet name on the left, then a pipe |, then the filename.
+# Example:
+# Amethyst Harmony | amethyst_harmony.jpg
+
+Amethyst Harmony | amethyst_harmony.png
+Rose Quartz Glow | rose_quartz_glow.jpg
+Citrine Sunrise | citrine_sunrise.jpg
+Labradorite Moon | labradorite_moon.jpg
+Clear Quartz Clarity | clear_quartz_clarity.jpg
+Black Onyx Luxe | black_onyx_luxe.jpg
+Moonstone Mist | moonstone_mist.jpg
+Turquoise Dream | turquoise_dream.jpg
+Jade Serenity | jade_serenity.jpg

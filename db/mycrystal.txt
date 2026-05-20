@@ -1,0 +1,1 @@
+postgresql://mycrystal:mycrystal6896@db.quantbots.co:5432/mycrystal
