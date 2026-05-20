@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+*.db
+*.sqlite
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+/media/
+/staticfiles/
+
+# Environment
+.env
+.env.*
+venv/
+venv3/
+ENV/
+env/
+.venv/
+
+# VS Code
+.vscode/
+
+# Mac
+.DS_Store
+
+# Optional local database credentials
+/db/mycrystal.txt
