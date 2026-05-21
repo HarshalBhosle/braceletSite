@@ -1,328 +1,167 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "bracelets/base.html" %}
 {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Collection - Crystal Bracelets</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #6b4c9a;
-            --secondary-color: #9b7ebd;
-            --accent-color: #d4a574;
-            --dark-color: #2c1810;
-            --light-color: #f8f5f2;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--light-color);
-        }
-        
-        .navbar,
-        .bracelet-card {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            padding: 0.75rem 0;
-        }
-        
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white !important;
-        }
-        
-        .nav-link {
-            color: white !important;
-            font-size: 0.98rem;
-            margin: 0 0.4rem;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link:hover {
-            color: var(--accent-color) !important;
-        }
-        
-        .hero-section {
-            background: linear-gradient(135deg, rgba(107, 76, 154, 0.95), rgba(155, 126, 189, 0.95)),
-                        url('https://images.unsplash.com/photo-1542974706-49a8c8c19f9c?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-            color: white;
-            padding: 3.5rem 1rem;
-            margin-bottom: 1.75rem;
-        }
-        .hero-tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.12);
-            padding: 0.45rem 0.9rem;
-            border-radius: 999px;
-            margin-bottom: 1.2rem;
-            letter-spacing: 0.12em;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-        }
-        .hero-section h1 {
-            font-size: 2.6rem;
-            font-weight: 800;
-            line-height: 1.08;
-            margin-bottom: 1.2rem;
-        }
-        .hero-section p {
-            font-size: 1rem;
-            max-width: 540px;
-            opacity: 0.94;
-            margin-bottom: 1.5rem;
-        }
-        .hero-card {
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
-        }
-        .btn-custom {
-            background: var(--accent-color);
-            color: white;
-            padding: 0.85rem 2rem;
-            font-size: 1rem;
-            border: none;
-            border-radius: 40px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-custom:hover {
-            background: var(--dark-color);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        
-        .bracelet-card {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 10px 22px rgba(0,0,0,0.06);
-            transition: transform 0.35s ease, box-shadow 0.35s ease;
-            min-height: 320px;
-            max-height: none;
-            border: none;
-            width: 100%;
-        }
-        
-        .bracelet-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 45px rgba(0,0,0,0.12);
-        }
-        
-        .bracelet-image {
-            width: 100%;
-            height: 220px;
-            overflow: hidden;
-            position: relative;
-            background: linear-gradient(135deg, #f5f5f5, #e7e0e8);
-            border-radius: 12px;
-        }
-        
-        .bracelet-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-            border-radius: 12px;
-        }
-        
-        .bracelet-card:hover .bracelet-image img {
-            transform: scale(1.05);
-        }
-        
-        .bracelet-details {
-            padding: 1rem 1rem 1.1rem 1rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            width: 100%;
-        }
-        
-        .bracelet-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 0.35rem;
-        }
-        
-        .bracelet-price {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 0.8rem;
-        }
-        
-        .bracelet-info {
-            margin-bottom: 0.35rem;
-            color: #555;
-            font-size: 0.92rem;
-        }
-        
-        .bracelet-info strong {
-            color: var(--dark-color);
-        }
 
-        @media (max-width: 767px) {
-            .bracelet-card {
-                flex-direction: column;
-                max-height: none;
-                min-height: 240px;
-            }
-            .bracelet-image {
-                width: 100%;
-                min-height: 180px;
-            }
-            .bracelet-details {
-                width: 100%;
-                padding: 1rem;
-            }
-        }
-        
-        .stock-badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-        
-        .in-stock {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .low-stock {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .out-of-stock {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .footer {
-            background: var(--dark-color);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-            margin-top: 4rem;
-        }
-        
-        .footer a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-        
-        .footer a:hover {
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-gem me-2"></i>Crystal Bracelets
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/bracelets/">Collection</a>
-                    </li>
-                </ul>
+{% block title %}Collection — Crystal Bracelets{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-lg-8">
+                <h1 class="hero-title text-white">Discover stunning handcrafted bracelets</h1>
+                <p class="text-white-75">Explore a premium collection of crystal bracelets designed with elegance, energy, and modern style in mind. Every piece is crafted to feel luxurious and effortless.</p>
+                <a href="#collection" class="btn btn-light btn-pill mt-3">Explore the collection</a>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block">
+                <div class="card-surface overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80" class="img-fluid" alt="Hero">
+                </div>
             </div>
         </div>
-    </nav>
+    </div>
+</section>
 
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-7 text-white">
-                    <span class="hero-tag">Crystal Jewelry Boutique</span>
-                    <h1>Discover stunning handcrafted bracelets</h1>
-                    <p>Shop our premium collection of crystal bracelets designed for elegance, balance, and everyday luxury.</p>
-                    <a href="#collection" class="btn-custom">
-                        Explore the collection
+<section class="container-fluid py-5" id="collection">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="page-heading">Luxury pieces built for everyday glamour</h2>
+                <p class="text-muted">Handpicked crystal bracelets, premium materials, and a refined finishing touch for a polished look that feels premium everywhere you wear it.</p>
+            </div>
+            <div class="d-none d-md-flex gap-2">
+                <span class="badge bg-light text-muted">Natural crystal</span>
+                <span class="badge bg-light text-muted">Artisan finish</span>
+                <span class="badge bg-light text-muted">Limited edition</span>
+            </div>
+        </div>
+
+        <div class="row gx-4">
+            <aside class="col-12 col-lg-3 mb-4 filter-sidebar">
+                <div class="card-surface p-4 filter-panel">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h3 class="h5 mb-1">Filters</h3>
+                            <p class="small text-muted mb-0">Narrow results by material, color, price, or stock.</p>
+                        </div>
+                        <span class="badge bg-primary text-white">Filters</span>
+                    </div>
+                    <form method="get" id="filterForm">
+                        {% if current_filters.sort %}
+                            <input type="hidden" name="sort" value="{{ current_filters.sort }}">
+                        {% endif %}
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Search</label>
+                            <input type="search" name="q" value="{{ current_filters.q|default_if_none:'' }}" class="form-control" placeholder="Search name or description">
+                        </div>
+
+                        <div class="mb-3">
+                        <label class="form-label small text-muted">Material</label>
+                        <select name="material" class="form-select">
+                            <option value="">Any</option>
+                            {% for m in materials %}
+                                <option value="{{ m }}" {% if current_filters.material == m %}selected{% endif %}>{{ m }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Color</label>
+                        <select name="color" class="form-select">
+                            <option value="">Any</option>
+                            {% for c in colors %}
+                                <option value="{{ c }}" {% if current_filters.color == c %}selected{% endif %}>{{ c }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small text-muted">Min</label>
+                            <input type="number" step="0.01" name="min_price" value="{{ current_filters.min_price|default_if_none:'' }}" class="form-control" placeholder="0">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small text-muted">Max</label>
+                            <input type="number" step="0.01" name="max_price" value="{{ current_filters.max_price|default_if_none:'' }}" class="form-control" placeholder="9999">
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch mt-3">
+                        <input class="form-check-input" type="checkbox" id="inStock" name="in_stock" value="1" {% if current_filters.in_stock %}checked{% endif %}>
+                        <label class="form-check-label small text-muted" for="inStock">Only show in-stock</label>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                        <a href="{% url 'bracelets_list' %}" class="btn btn-outline-secondary btn-sm">Clear</a>
+                    </div>
+                </form>
+            </div>
+        </aside>
+
+        <div class="col-12 col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-3 gap-3">
+                <div>
+                    <div class="text-muted small mb-1">Showing {{ bracelets|length }} items</div>
+                    <div class="small text-muted">Sort options are right above the collection.</div>
+                </div>
+                <div class="sort-panel card-surface p-3 w-100 w-md-auto">
+                    <form id="sortForm" method="get" class="d-flex align-items-center gap-3">
+                        {# preserve other filters when sorting #}
+                        {% for k,v in current_filters.items %}
+                            {% if k != 'sort' %}
+                                <input type="hidden" name="{{ k }}" value="{{ v }}">
+                            {% endif %}
+                        {% endfor %}
+                        <label class="mb-0 fw-semibold text-muted">Sort by</label>
+                        <select name="sort" class="form-select form-select-sm" onchange="document.getElementById('sortForm').submit();">
+                            <option value="new" {% if selected_sort == 'new' %}selected{% endif %}>Newest</option>
+                            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low → High</option>
+                            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High → Low</option>
+                            <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name: A → Z</option>
+                            <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name: Z → A</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                {% for bracelet in bracelets %}
+                <div class="col">
+                    <a href="{% url 'bracelet_detail' bracelet.pk %}" class="text-decoration-none text-reset d-block h-100">
+                        <article class="bracelet-card h-100">
+                            <div class="bracelet-image">
+                                {% if bracelet.local_image %}
+                                    <img src="{% static bracelet.local_image %}" alt="{{ bracelet.name }}" loading="lazy">
+                                {% elif bracelet.image_url %}
+                                    <img src="{{ bracelet.image_url }}" alt="{{ bracelet.name }}" loading="lazy">
+                                {% elif bracelet.image %}
+                                    <img src="{{ bracelet.image.url }}" alt="{{ bracelet.name }}" loading="lazy">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" alt="{{ bracelet.name }}" loading="lazy">
+                                {% endif %}
+                            </div>
+                            <div class="bracelet-details d-flex flex-column">
+                                <div>
+                                    <h3 class="bracelet-name">{{ bracelet.name }}</h3>
+                                    <p class="text-muted small mb-3">{{ bracelet.material }} · {{ bracelet.color }}</p>
+                                    <div class="bracelet-price fw-bold mb-3">₹{{ bracelet.price }}</div>
+                                </div>
+                                <div class="mt-auto">
+                                    {% if bracelet.stock > 10 %}
+                                        <span class="product-badge in-stock">In stock</span>
+                                    {% elif bracelet.stock > 0 %}
+                                        <span class="product-badge low-stock">Limited</span>
+                                    {% else %}
+                                        <span class="product-badge out-of-stock">Sold out</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
                     </a>
                 </div>
-                <div class="col-lg-5 d-none d-lg-block">
-                    <div class="hero-card">
-                        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80" alt="Bracelet hero" class="img-fluid rounded-4 shadow-lg">
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
-    </section>
-
-    <section id="collection" class="container py-5">
-        <div class="row g-4 justify-content-center">
-            {% for bracelet in bracelets %}
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 d-flex mb-3">
-                <a href="{% url 'bracelet_detail' bracelet.pk %}" class="text-decoration-none text-dark d-flex w-100">
-                    <div class="bracelet-card">
-                        <div class="bracelet-image">
-                            {% if bracelet.local_image %}
-                                <img src="{% static bracelet.local_image %}" alt="{{ bracelet.name }}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x300?text=Bracelet'">
-                            {% elif bracelet.image_url %}
-                                <img src="{{ bracelet.image_url }}" alt="{{ bracelet.name }}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x300?text=Bracelet'">
-                            {% elif bracelet.image %}
-                                <img src="{{ bracelet.image.url }}" alt="{{ bracelet.name }}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x300?text=Bracelet'">
-                            {% else %}
-                                <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500" alt="{{ bracelet.name }}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x300?text=Bracelet'">
-                            {% endif %}
-                        </div>
-                        <div class="bracelet-details">
-                            <h3 class="bracelet-name">{{ bracelet.name }}</h3>
-                            <div class="bracelet-price">₹{{ bracelet.price }}</div>
-                            
-                            <div class="bracelet-info">
-                                <strong>Material:</strong> {{ bracelet.material }}
-                            </div>
-                            <div class="bracelet-info">
-                                <strong>Color:</strong> {{ bracelet.color }}
-                            </div>
-                            <div class="bracelet-info">
-                                <strong>Size:</strong> {{ bracelet.size }}
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Crystal Bracelets. All rights reserved.</p>
-            <p>
-                <a href="#">Privacy Policy</a> | 
-                <a href="#">Terms of Service</a> | 
-                <a href="#">Contact Us</a>
-            </p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    </div>
+</section>
+{% endblock %}

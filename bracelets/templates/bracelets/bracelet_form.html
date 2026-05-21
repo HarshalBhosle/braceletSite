@@ -1,0 +1,149 @@
+{% extends "bracelets/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} — Admin{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <header class="mb-3">
+        <h1 class="page-heading">{{ title }}</h1>
+        <p class="text-muted">Use this form to create or update bracelet details that appear on the site.</p>
+    </header>
+
+    <div class="card-surface p-4 mb-5">
+        <form method="post" enctype="multipart/form-data" id="braceletForm">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div>
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors|striptags }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}<div class="text-danger small">{{ form.description.errors|striptags }}</div>{% endif %}
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Price (INR)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                {{ form.price }}
+                            </div>
+                            {% if form.price.errors %}<div class="text-danger small">{{ form.price.errors|striptags }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Stock</label>
+                            {{ form.stock }}
+                            {% if form.stock.errors %}<div class="text-danger small">{{ form.stock.errors|striptags }}</div>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Material</label>
+                            {{ form.material }}
+                            {% if form.material.errors %}<div class="text-danger small">{{ form.material.errors|striptags }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Color</label>
+                            {{ form.color }}
+                            {% if form.color.errors %}<div class="text-danger small">{{ form.color.errors|striptags }}</div>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label class="form-label">Size</label>
+                        {{ form.size }}
+                        {% if form.size.errors %}<div class="text-danger small">{{ form.size.errors|striptags }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Image (upload)</label>
+                        {{ form.image }}
+                        {% if form.image.help_text %}<div class="file-help">{{ form.image.help_text }}</div>{% endif %}
+                        {% if form.image.errors %}<div class="text-danger small">{{ form.image.errors|striptags }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Image URL (optional)</label>
+                        {{ form.image_url }}
+                        {% if form.image_url.errors %}<div class="text-danger small">{{ form.image_url.errors|striptags }}</div>{% endif %}
+                    </div>
+
+                    <div class="mt-4 d-flex gap-2">
+                        <button class="btn btn-primary btn-pill" type="submit">Save Bracelet</button>
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </div>
+
+                <aside class="form-panel">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="image-preview" id="imagePreview"><span class="text-muted">No image selected</span></div>
+                    </div>
+
+                    <h5 class="mb-1" id="previewName">—</h5>
+                    <div class="small-note mb-3 text-muted" id="previewMaterial">Material —</div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="small text-muted">Price</div>
+                        <div class="fw-bold">₹<span id="previewPrice">0.00</span></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="small text-muted">Stock</div>
+                        <div class="fw-bold"><span id="previewStock">0</span></div>
+                    </div>
+                </aside>
+            </div>
+        </form>
+    </div>
+    {% block scripts %}
+    <script>
+        (function(){
+            const imgInput = document.querySelector('#id_image');
+            const preview = document.getElementById('imagePreview');
+            const priceField = document.querySelector('#id_price');
+            const stockField = document.querySelector('#id_stock');
+            const nameField = document.querySelector('#id_name');
+            const materialField = document.querySelector('#id_material');
+            const previewPrice = document.getElementById('previewPrice');
+            const previewStock = document.getElementById('previewStock');
+            const previewName = document.getElementById('previewName');
+            const previewMaterial = document.getElementById('previewMaterial');
+
+            function showImage(file){
+                if(!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    preview.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            if(imgInput){
+                imgInput.addEventListener('change', function(e){
+                    const f = e.target.files && e.target.files[0];
+                    if(f) showImage(f);
+                    else preview.innerHTML = '<span class="text-muted">No image selected</span>';
+                });
+            }
+
+            if(priceField){ priceField.addEventListener('input', function(){ previewPrice.textContent = this.value || '0.00'; }); }
+            if(stockField){ stockField.addEventListener('input', function(){ previewStock.textContent = this.value || '0'; }); }
+            if(nameField){ nameField.addEventListener('input', function(){ previewName.textContent = this.value || '—'; }); }
+            if(materialField){ materialField.addEventListener('input', function(){ previewMaterial.textContent = this.value || 'Material —'; }); }
+        })();
+    </script>
+    {% endblock %}
+</div>
+{% endblock %}

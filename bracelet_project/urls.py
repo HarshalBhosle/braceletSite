@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from bracelets.views import bracelets_list
+from bracelets.views import bracelets_list, landing_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', bracelets_list, name='home'),
+    path('', landing_page, name='landing'),
     path('bracelets/', include('bracelets.urls')),
+    path('accounts/', include('bracelets.auth_urls')),
+    path('api/', include('bracelets.api_urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,31 @@
+{% extends "bracelets/base.html" %}
+{% load static %}
+
+{% block title %}Admin Register — Crystal Bracelets{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h1 class="h3 mb-1">Admin Registration</h1>
+    <p class="text-muted mb-3">Create your admin account to manage bracelets, update inventory, and keep the homepage curated.</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary w-100 py-2 btn-pill" type="submit">Register</button>
+    </form>
+    <div class="text-center text-muted mt-4">
+        <p class="mb-1">Already have an account? <a href="{% url 'login_admin' %}">Login here</a></p>
+        <p><a href="{% url 'landing' %}">Back to home</a></p>
+    </div>
+</div>
+{% endblock %}
