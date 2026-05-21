@@ -12,7 +12,7 @@ Use the exact bracelet name on the left and the image filename on the right, for
 
 `Amethyst Harmony | amethyst_harmony.jpg`
 
-Extensions can be .jpg, .jpeg, or .png.
+Extensions can be any browser-friendly image type, including `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`, `.avif`, `.bmp`, and `.svg`.
 
 The current expected filenames are:
 - `amethyst_harmony.jpg`

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,13 +22,15 @@ def parse_database_url(url):
     if not url:
         return None
     parsed = urlparse(url)
+    if parsed.scheme not in ('postgres', 'postgresql'):
+        return None
     return {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mycrystal',
-        'USER': 'mycrystal',
-        'PASSWORD':  'mycrystal6896',
-        'HOST':  'db.quantbots.co',
-        'PORT': '5432',
+        'NAME': unquote(parsed.path.lstrip('/')),
+        'USER': unquote(parsed.username or ''),
+        'PASSWORD': unquote(parsed.password or ''),
+        'HOST': parsed.hostname or '',
+        'PORT': str(parsed.port or 5432),
     }
 
 
