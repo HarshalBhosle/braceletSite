@@ -47,13 +47,13 @@ jobs:
             --exclude='staticfiles/' \
             ./ ${USER_NAME}@${HOSTNAME}:${TARGET_DIR}/
           
-            # 3. Remote Commands (Permissions, Migrations, Restarts)
-            ssh -o StrictHostKeyChecking=no ${USER_NAME}@${HOSTNAME} << 'EOF'
-              cd /home/ubuntu/mycrystal
-              chmod +x runmycrystal.sh
-              source venv/bin/activate
-              python manage.py migrate
-              echo "Restarting services..."
+          # 3. Remote commands (migrations, restart)
+          ssh -i private_key -o StrictHostKeyChecking=no ${USER_NAME}@${HOSTNAME} << 'EOF'
+            cd /home/ubuntu/mycrystal
+            chmod +x runmycrystal.sh
+            source venv/bin/activate
+            python manage.py migrate
+            echo "Restarting services..."
             pm2 restart runmycrystal
             echo "Deployment completed successfully!"
           EOF
