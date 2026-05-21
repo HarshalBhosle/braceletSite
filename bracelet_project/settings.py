@@ -23,13 +23,14 @@ def parse_database_url(url):
         return None
     parsed = urlparse(url)
     return {
-        'ENGINE': 'django.db.backends.postgresql' if parsed.scheme.startswith('postgres') else 'django.db.backends.sqlite3',
-        'NAME': parsed.path.lstrip('/') or '',
-        'USER': parsed.username or '',
-        'PASSWORD': parsed.password or '',
-        'HOST': parsed.hostname or '',
-        'PORT': str(parsed.port or ''),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mycrystal',
+        'USER': 'mycrystal',
+        'PASSWORD':  'mycrystal6896',
+        'HOST':  'db.quantbots.co',
+        'PORT': '5432',
     }
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-8%kd4z7fqgmjn$*soe)4s3nmoqoqff!_0rfissgp14y17$r)c_')
@@ -37,7 +38,7 @@ DEBUG = os.environ.get('DEBUG', 'True').lower() in ('1', 'true', 'yes')
 USE_POSTGRES = os.environ.get('USE_POSTGRES', 'False').lower() in ('1', 'true', 'yes')
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','mycrystal.quantbots.co']
 
 
 # Application definition
