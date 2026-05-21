@@ -1,7 +1,7 @@
 {% extends "bracelets/base.html" %}
 {% load static %}
 
-{% block title %}Admin Login — Crystal Bracelets{% endblock %}
+{% block title %}Admin Login - Crystal Bracelets{% endblock %}
 
 {% block content %}
 <div class="auth-container">
@@ -9,6 +9,9 @@
     <p class="text-muted mb-3">Sign in to manage bracelets, update product details, and keep the landing page fresh.</p>
     <form method="post" novalidate>
         {% csrf_token %}
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         {% for field in form %}
             <div class="mb-3">
                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>

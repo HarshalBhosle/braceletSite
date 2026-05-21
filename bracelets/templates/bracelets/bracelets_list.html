@@ -1,7 +1,7 @@
 {% extends "bracelets/base.html" %}
 {% load static %}
 
-{% block title %}Collection — Crystal Bracelets{% endblock %}
+{% block title %}Collection - Crystal Bracelets{% endblock %}
 
 {% block content %}
 <section class="hero-section">
@@ -14,7 +14,7 @@
             </div>
             <div class="col-lg-4 d-none d-lg-block">
                 <div class="card-surface overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80" class="img-fluid" alt="Hero">
+                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80" class="img-fluid" alt="Bracelets displayed on a neutral background">
                 </div>
             </div>
         </div>
@@ -23,10 +23,10 @@
 
 <section class="container-fluid py-5" id="collection">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
                 <h2 class="page-heading">Luxury pieces built for everyday glamour</h2>
-                <p class="text-muted">Handpicked crystal bracelets, premium materials, and a refined finishing touch for a polished look that feels premium everywhere you wear it.</p>
+                <p class="text-muted mb-0">Handpicked crystal bracelets, premium materials, and a refined finishing touch for a polished look that feels premium everywhere you wear it.</p>
             </div>
             <div class="d-none d-md-flex gap-2">
                 <span class="badge bg-light text-muted">Natural crystal</span>
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="row gx-4">
+        <div class="row gx-4 collection-layout">
             <aside class="col-12 col-lg-3 mb-4 filter-sidebar">
                 <div class="card-surface p-4 filter-panel">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -45,121 +45,127 @@
                         </div>
                         <span class="badge bg-primary text-white">Filters</span>
                     </div>
+
                     <form method="get" id="filterForm">
                         {% if current_filters.sort %}
                             <input type="hidden" name="sort" value="{{ current_filters.sort }}">
                         {% endif %}
-                        <div class="mb-3">
-                            <label class="form-label small text-muted">Search</label>
-                            <input type="search" name="q" value="{{ current_filters.q|default_if_none:'' }}" class="form-control" placeholder="Search name or description">
-                        </div>
 
                         <div class="mb-3">
-                        <label class="form-label small text-muted">Material</label>
-                        <select name="material" class="form-select">
-                            <option value="">Any</option>
-                            {% for m in materials %}
-                                <option value="{{ m }}" {% if current_filters.material == m %}selected{% endif %}>{{ m }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small text-muted">Color</label>
-                        <select name="color" class="form-select">
-                            <option value="">Any</option>
-                            {% for c in colors %}
-                                <option value="{{ c }}" {% if current_filters.color == c %}selected{% endif %}>{{ c }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <label class="form-label small text-muted">Min</label>
-                            <input type="number" step="0.01" name="min_price" value="{{ current_filters.min_price|default_if_none:'' }}" class="form-control" placeholder="0">
+                            <label class="form-label small text-muted" for="filterSearch">Search</label>
+                            <input id="filterSearch" type="search" name="q" value="{{ current_filters.q|default_if_none:'' }}" class="form-control" placeholder="Search name or description">
                         </div>
-                        <div class="col-6">
-                            <label class="form-label small text-muted">Max</label>
-                            <input type="number" step="0.01" name="max_price" value="{{ current_filters.max_price|default_if_none:'' }}" class="form-control" placeholder="9999">
+
+                        <div class="mb-3">
+                            <label class="form-label small text-muted" for="filterMaterial">Material</label>
+                            <select id="filterMaterial" name="material" class="form-select">
+                                <option value="">Any</option>
+                                {% for material in materials %}
+                                    <option value="{{ material }}" {% if current_filters.material == material %}selected{% endif %}>{{ material }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                    </div>
 
-                    <div class="form-check form-switch mt-3">
-                        <input class="form-check-input" type="checkbox" id="inStock" name="in_stock" value="1" {% if current_filters.in_stock %}checked{% endif %}>
-                        <label class="form-check-label small text-muted" for="inStock">Only show in-stock</label>
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label small text-muted" for="filterColor">Color</label>
+                            <select id="filterColor" name="color" class="form-select">
+                                <option value="">Any</option>
+                                {% for color in colors %}
+                                    <option value="{{ color }}" {% if current_filters.color == color %}selected{% endif %}>{{ color }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-                    <div class="d-flex gap-2 mt-3">
-                        <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                        <a href="{% url 'bracelets_list' %}" class="btn btn-outline-secondary btn-sm">Clear</a>
-                    </div>
-                </form>
-            </div>
-        </aside>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label small text-muted" for="filterMinPrice">Min</label>
+                                <input id="filterMinPrice" type="number" step="0.01" min="0" name="min_price" value="{{ current_filters.min_price|default_if_none:'' }}" class="form-control" placeholder="0">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small text-muted" for="filterMaxPrice">Max</label>
+                                <input id="filterMaxPrice" type="number" step="0.01" min="0" name="max_price" value="{{ current_filters.max_price|default_if_none:'' }}" class="form-control" placeholder="9999">
+                            </div>
+                        </div>
 
-        <div class="col-12 col-lg-9">
-            <div class="d-flex justify-content-between align-items-center mb-3 gap-3">
-                <div>
-                    <div class="text-muted small mb-1">Showing {{ bracelets|length }} items</div>
-                    <div class="small text-muted">Sort options are right above the collection.</div>
-                </div>
-                <div class="sort-panel card-surface p-3 w-100 w-md-auto">
-                    <form id="sortForm" method="get" class="d-flex align-items-center gap-3">
-                        {# preserve other filters when sorting #}
-                        {% for k,v in current_filters.items %}
-                            {% if k != 'sort' %}
-                                <input type="hidden" name="{{ k }}" value="{{ v }}">
-                            {% endif %}
-                        {% endfor %}
-                        <label class="mb-0 fw-semibold text-muted">Sort by</label>
-                        <select name="sort" class="form-select form-select-sm" onchange="document.getElementById('sortForm').submit();">
-                            <option value="new" {% if selected_sort == 'new' %}selected{% endif %}>Newest</option>
-                            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low → High</option>
-                            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High → Low</option>
-                            <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name: A → Z</option>
-                            <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name: Z → A</option>
-                        </select>
+                        <div class="form-check form-switch mt-3">
+                            <input class="form-check-input" type="checkbox" id="inStock" name="in_stock" value="1" {% if current_filters.in_stock %}checked{% endif %}>
+                            <label class="form-check-label small text-muted" for="inStock">Only show in-stock</label>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                            <a href="{% url 'bracelets_list' %}" class="btn btn-outline-secondary btn-sm">Clear</a>
+                        </div>
                     </form>
                 </div>
-            </div>
+            </aside>
 
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-                {% for bracelet in bracelets %}
-                <div class="col">
-                    <a href="{% url 'bracelet_detail' bracelet.pk %}" class="text-decoration-none text-reset d-block h-100">
-                        <article class="bracelet-card h-100">
-                            <div class="bracelet-image">
-                                {% if bracelet.local_image %}
-                                    <img src="{% static bracelet.local_image %}" alt="{{ bracelet.name }}" loading="lazy">
-                                {% elif bracelet.image_url %}
-                                    <img src="{{ bracelet.image_url }}" alt="{{ bracelet.name }}" loading="lazy">
-                                {% elif bracelet.image %}
-                                    <img src="{{ bracelet.image.url }}" alt="{{ bracelet.name }}" loading="lazy">
-                                {% else %}
-                                    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" alt="{{ bracelet.name }}" loading="lazy">
+            <div class="col-12 col-lg-9">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-3">
+                    <div>
+                        <div class="text-muted small mb-1">Showing {{ bracelets|length }} items</div>
+                        <div class="small text-muted">Sort options are right above the collection.</div>
+                    </div>
+                    <div class="sort-panel card-surface p-3">
+                        <form id="sortForm" method="get" class="d-flex align-items-center gap-3">
+                            {% for key, value in current_filters.items %}
+                                {% if key != 'sort' %}
+                                    <input type="hidden" name="{{ key }}" value="{{ value }}">
                                 {% endif %}
-                            </div>
-                            <div class="bracelet-details d-flex flex-column">
-                                <div>
-                                    <h3 class="bracelet-name">{{ bracelet.name }}</h3>
-                                    <p class="text-muted small mb-3">{{ bracelet.material }} · {{ bracelet.color }}</p>
-                                    <div class="bracelet-price fw-bold mb-3">₹{{ bracelet.price }}</div>
-                                </div>
-                                <div class="mt-auto">
-                                    {% if bracelet.stock > 10 %}
-                                        <span class="product-badge in-stock">In stock</span>
-                                    {% elif bracelet.stock > 0 %}
-                                        <span class="product-badge low-stock">Limited</span>
-                                    {% else %}
-                                        <span class="product-badge out-of-stock">Sold out</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </article>
-                    </a>
+                            {% endfor %}
+                            <label class="mb-0 fw-semibold text-muted" for="sortSelect">Sort by</label>
+                            <select id="sortSelect" name="sort" class="form-select form-select-sm" onchange="document.getElementById('sortForm').submit();">
+                                <option value="new" {% if selected_sort == 'new' %}selected{% endif %}>Newest</option>
+                                <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                                <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                                <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+                                <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+                            </select>
+                        </form>
+                    </div>
                 </div>
-                {% endfor %}
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                    {% for bracelet in bracelets %}
+                        <div class="col">
+                            <a href="{% url 'bracelet_detail' bracelet.pk %}" class="text-decoration-none text-reset d-block h-100">
+                                <article class="bracelet-card h-100">
+                                    <div class="bracelet-image">
+                                        {% if bracelet.local_image %}
+                                            <img src="{% static bracelet.local_image %}" alt="{{ bracelet.name }}" loading="lazy">
+                                        {% elif bracelet.image_url %}
+                                            <img src="{{ bracelet.image_url }}" alt="{{ bracelet.name }}" loading="lazy">
+                                        {% elif bracelet.image %}
+                                            <img src="{{ bracelet.image.url }}" alt="{{ bracelet.name }}" loading="lazy">
+                                        {% else %}
+                                            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" alt="{{ bracelet.name }}" loading="lazy">
+                                        {% endif %}
+                                    </div>
+                                    <div class="bracelet-details d-flex flex-column">
+                                        <div>
+                                            <h3 class="bracelet-name">{{ bracelet.name }}</h3>
+                                            <p class="text-muted small mb-3">{{ bracelet.material }} | {{ bracelet.color }}</p>
+                                            <div class="bracelet-price fw-bold mb-3">Rs. {{ bracelet.price }}</div>
+                                        </div>
+                                        <div class="mt-auto">
+                                            {% if bracelet.stock > 10 %}
+                                                <span class="product-badge in-stock">In stock</span>
+                                            {% elif bracelet.stock > 0 %}
+                                                <span class="product-badge low-stock">Limited</span>
+                                            {% else %}
+                                                <span class="product-badge out-of-stock">Sold out</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </article>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-info">No bracelets match the current filters.</div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

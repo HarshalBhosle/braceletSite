@@ -15,14 +15,14 @@
 <body>
     <nav class="site-navbar navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="/"> <i class="bi bi-gem me-2"></i>Crystal Bracelets</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav">
+            <a class="navbar-brand" href="{% url 'landing' %}"><i class="bi bi-gem me-2"></i>Crystal Bracelets</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="siteNav">
                 <ul class="navbar-nav ms-auto align-items-center gap-2">
-                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/bracelets/">Collection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'landing' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'bracelets_list' %}">Collection</a></li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'logout_admin' %}">Logout</a></li>
@@ -49,7 +49,7 @@
     <footer class="site-footer mt-5">
         <div class="container text-center py-4">
             <p class="mb-1">&copy; {{ now|date:"Y" }} Crystal Bracelets</p>
-            <p class="small text-muted">Handcrafted pieces · Curated demos · Custom admin portal</p>
+            <p class="small text-muted">Handcrafted pieces | Curated demos | Custom admin portal</p>
         </div>
     </footer>
 

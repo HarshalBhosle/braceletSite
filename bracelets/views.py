@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import BraceletForm
 from .models import Bracelet
@@ -17,17 +18,16 @@ def landing_page(request):
 def bracelets_list(request):
     qs = Bracelet.objects.all()
 
-    # Filters from GET
-    q = request.GET.get('q')
-    material = request.GET.get('material')
-    color = request.GET.get('color')
-    min_price = request.GET.get('min_price')
-    max_price = request.GET.get('max_price')
-    in_stock = request.GET.get('in_stock')
-    sort = request.GET.get('sort')
+    q = request.GET.get('q', '').strip()
+    material = request.GET.get('material', '').strip()
+    color = request.GET.get('color', '').strip()
+    min_price = request.GET.get('min_price', '').strip()
+    max_price = request.GET.get('max_price', '').strip()
+    in_stock = request.GET.get('in_stock', '').strip()
+    sort = request.GET.get('sort', 'new').strip()
 
     if q:
-        qs = qs.filter(name__icontains=q) | qs.filter(description__icontains=q)
+        qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
     if material:
         qs = qs.filter(material__iexact=material)
     if color:
@@ -46,7 +46,6 @@ def bracelets_list(request):
         if in_stock.lower() in ['1', 'true', 'yes', 'on']:
             qs = qs.filter(stock__gt=0)
 
-    # Sorting
     sort_map = {
         'new': '-created_at',
         'price_asc': 'price',
@@ -54,22 +53,28 @@ def bracelets_list(request):
         'name_asc': 'name',
         'name_desc': '-name'
     }
-    order = sort_map.get(sort or 'new', '-created_at')
+    if sort not in sort_map:
+        sort = 'new'
+    order = sort_map[sort]
     qs = qs.order_by(order)
 
     bracelets = list(qs)
     for bracelet in bracelets:
         bracelet.local_image = bracelet_image_map.get(bracelet.name)
 
-    # values for filter controls
-    materials = Bracelet.objects.values_list('material', flat=True).distinct()
-    colors = Bracelet.objects.values_list('color', flat=True).distinct()
+    materials = Bracelet.objects.exclude(material='').values_list('material', flat=True).distinct().order_by('material')
+    colors = Bracelet.objects.exclude(color='').values_list('color', flat=True).distinct().order_by('color')
+    current_filters = {
+        key: value
+        for key, value in request.GET.dict().items()
+        if value
+    }
 
     return render(request, 'bracelets/bracelets_list.html', {
         'bracelets': bracelets,
         'materials': materials,
         'colors': colors,
-        'current_filters': request.GET.dict(),
+        'current_filters': current_filters,
         'selected_sort': sort or 'new',
     })
 

@@ -1,10 +1,10 @@
 {% extends "bracelets/base.html" %}
 {% load static %}
 
-{% block title %}Admin Dashboard — Crystal Bracelets{% endblock %}
+{% block title %}Admin Dashboard - Crystal Bracelets{% endblock %}
 
 {% block content %}
-<main class="container py-5">
+<div class="container py-5">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
         <div>
             <h1 class="page-heading">Bracelet Management</h1>
@@ -15,47 +15,47 @@
 
     <div class="row g-4">
         {% for bracelet in bracelets %}
-        <div class="col-12">
-            <div class="card-surface p-3 d-flex gap-3 align-items-center">
-                <div style="width:140px;flex:0 0 140px;">
-                    <div class="ratio ratio-4x3 overflow-hidden rounded-3">
-                        {% if bracelet.local_image %}
-                            <img src="{% static bracelet.local_image %}" class="object-fit-cover" alt="{{ bracelet.name }}">
-                        {% elif bracelet.image_url %}
-                            <img src="{{ bracelet.image_url }}" class="object-fit-cover" alt="{{ bracelet.name }}">
-                        {% elif bracelet.image %}
-                            <img src="{{ bracelet.image.url }}" class="object-fit-cover" alt="{{ bracelet.name }}">
-                        {% else %}
-                            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" class="object-fit-cover" alt="{{ bracelet.name }}">
-                        {% endif %}
+            <div class="col-12">
+                <div class="card-surface p-3 admin-product-row">
+                    <div class="admin-product-image">
+                        <div class="ratio ratio-4x3 overflow-hidden rounded-3">
+                            {% if bracelet.local_image %}
+                                <img src="{% static bracelet.local_image %}" class="object-fit-cover" alt="{{ bracelet.name }}">
+                            {% elif bracelet.image_url %}
+                                <img src="{{ bracelet.image_url }}" class="object-fit-cover" alt="{{ bracelet.name }}">
+                            {% elif bracelet.image %}
+                                <img src="{{ bracelet.image.url }}" class="object-fit-cover" alt="{{ bracelet.name }}">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" class="object-fit-cover" alt="{{ bracelet.name }}">
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <div class="flex-grow-1">
-                    <h3 class="h5 mb-1">{{ bracelet.name }}</h3>
-                    <p class="mb-1 text-muted">{{ bracelet.material }} · {{ bracelet.color }} · {{ bracelet.size }}</p>
-                    <p class="mb-1 small">{{ bracelet.description|truncatechars:120 }}</p>
-                    <span class="badge bg-light text-muted">₹{{ bracelet.price }}</span>
-                </div>
-                <div class="text-end">
-                    <div class="mb-2">
-                        {% if bracelet.stock > 10 %}
-                            <span class="badge bg-success">In stock</span>
-                        {% elif bracelet.stock > 0 %}
-                            <span class="badge bg-warning text-dark">Limited</span>
-                        {% else %}
-                            <span class="badge bg-danger">Sold out</span>
-                        {% endif %}
+                    <div class="flex-grow-1">
+                        <h3 class="h5 mb-1">{{ bracelet.name }}</h3>
+                        <p class="mb-1 text-muted">{{ bracelet.material }} | {{ bracelet.color }} | {{ bracelet.size }}</p>
+                        <p class="mb-1 small">{{ bracelet.description|truncatechars:120 }}</p>
+                        <span class="badge bg-light text-muted">Rs. {{ bracelet.price }}</span>
                     </div>
-                    <a href="{% url 'edit_bracelet' bracelet.pk %}" class="btn btn-outline-secondary btn-sm me-2">Edit</a>
-                    <a href="{% url 'delete_bracelet' bracelet.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                    <div class="text-md-end admin-actions">
+                        <div class="mb-2">
+                            {% if bracelet.stock > 10 %}
+                                <span class="badge bg-success">In stock</span>
+                            {% elif bracelet.stock > 0 %}
+                                <span class="badge bg-warning text-dark">Limited</span>
+                            {% else %}
+                                <span class="badge bg-danger">Sold out</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'edit_bracelet' bracelet.pk %}" class="btn btn-outline-secondary btn-sm me-2">Edit</a>
+                        <a href="{% url 'delete_bracelet' bracelet.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </div>
                 </div>
             </div>
-        </div>
         {% empty %}
-        <div class="col-12">
-            <div class="alert alert-info">No bracelets are available yet. Click Add New Bracelet to start building your collection.</div>
-        </div>
+            <div class="col-12">
+                <div class="alert alert-info">No bracelets are available yet. Click Add New Bracelet to start building your collection.</div>
+            </div>
         {% endfor %}
     </div>
-</main>
+</div>
 {% endblock %}

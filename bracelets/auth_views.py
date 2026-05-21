@@ -28,19 +28,23 @@ def register_admin(request):
 
 def login_admin(request):
     if request.user.is_authenticated:
-        return redirect('admin_dashboard')
+        return redirect('bracelets_list')
 
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            return redirect('admin_dashboard')
+            next_url = request.POST.get('next') or request.GET.get('next')
+            return redirect(next_url or 'bracelets_list')
     else:
         form = AuthenticationForm()
 
-    return render(request, 'bracelets/login.html', {'form': form})
+    return render(request, 'bracelets/login.html', {
+        'form': form,
+        'next': request.GET.get('next', ''),
+    })
 
 
 def logout_admin(request):
     logout(request)
-    return redirect('landing')
+    return redirect('bracelets_list')
