@@ -10,25 +10,82 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import unquote, urlparse
 
-import environ
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env(
-    DEBUG=(bool, True),
-)
-environ.Env.read_env(BASE_DIR / '.env')
+
+def load_env_file(path):
+    if not path.exists():
+        return
+    for raw_line in path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, value = line.split('=', 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+def env_bool(name, default=False):
+    return os.environ.get(name, str(default)).lower() in ('1', 'true', 'yes', 'on')
+
+
+def env_int(name, default):
+    try:
+        return int(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
+
+def parse_database_url(url):
+    if not url:
+        return None
+    parsed = urlparse(url)
+    if parsed.scheme not in ('postgres', 'postgresql'):
+        return None
+    return {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': unquote(parsed.path.lstrip('/')),
+        'USER': unquote(parsed.username or ''),
+        'PASSWORD': unquote(parsed.password or ''),
+        'HOST': parsed.hostname or '',
+        'PORT': str(parsed.port or 5432),
+    }
+
+
+def database_from_parts():
+    required = {
+        'NAME': os.environ.get('DB_NAME', ''),
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', ''),
+    }
+    if not all(required.values()):
+        return None
+    return {
+        'ENGINE': 'django.db.backends.postgresql',
+        **required,
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
+
+
+load_env_file(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY', default='django-insecure-8%kd4z7fqgmjn$*soe)4s3nmoqoqff!_0rfissgp14y17$r)c_')
-DEBUG = env.bool('DEBUG', default=True)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-8%kd4z7fqgmjn$*soe)4s3nmoqoqff!_0rfissgp14y17$r)c_')
+DEBUG = env_bool('DEBUG', True)
 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','mycrystals.quantbots.co']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://mycrystals.quantbots.co',
+]
 
 
 # Application definition
@@ -74,32 +131,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'bracelet_project.wsgi.application'
 
 
-# Database — each value comes from .env (see .env.example)
-DB_ENGINE = env('DB_ENGINE', default='django.db.backends.postgresql')
-DB_NAME = env('DB_NAME')
-DB_USER = env('DB_USER')
-DB_PASSWORD = env('DB_PASSWORD')
-DB_HOST = env('DB_HOST')
-DB_PORT = env('DB_PORT', default='5432')
-DB_CONN_MAX_AGE = env.int('DB_CONN_MAX_AGE', default=600)
+# Database: PostgreSQL only.
+database_url = os.environ.get('DATABASE_URL', '')
+if not database_url:
+    config_file = BASE_DIR / 'db' / 'mycrystal.txt'
+    if config_file.exists():
+        database_url = config_file.read_text().strip()
 
-# postgresql://USER:PASSWORD@HOST:PORT/NAME (password URL-encoded if needed)
-DATABASE_URL = (
-    f'postgresql://{quote(DB_USER)}:{quote(DB_PASSWORD)}'
-    f'@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-)
+parsed_db = parse_database_url(database_url) or database_from_parts()
+if not parsed_db:
+    raise ImproperlyConfigured(
+        'PostgreSQL database configuration is required. Set DATABASE_URL, '
+        'create db/mycrystal.txt, or provide DB_NAME/DB_USER/DB_PASSWORD/DB_HOST.'
+    )
 
-DATABASES = {
-    'default': {
-        'ENGINE': DB_ENGINE,
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-        'CONN_MAX_AGE': DB_CONN_MAX_AGE,
-    },
-}
+parsed_db['CONN_MAX_AGE'] = env_int('DB_CONN_MAX_AGE', 600)
+DATABASES = {'default': parsed_db}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
