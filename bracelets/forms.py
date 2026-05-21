@@ -36,6 +36,9 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class BraceletForm(forms.ModelForm):
+    def clean_stock(self):
+        return self.cleaned_data.get('stock') or 0
+
     class Meta:
         model = Bracelet
         fields = [

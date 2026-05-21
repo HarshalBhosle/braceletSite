@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework.test import APITestCase
 
 from .models import Bracelet
 
@@ -47,3 +48,19 @@ class CollectionFilterVisibilityTests(TestCase):
 
         self.assertRedirects(response, reverse('bracelets_list'))
         self.assert_filter_is_visible(response)
+
+
+class BraceletApiTests(APITestCase):
+    def test_api_can_create_bracelet_rows(self):
+        response = self.client.post('/api/bracelets/', {
+            'name': 'Green Aventurine',
+            'description': 'Fresh crystal bracelet',
+            'price': '899.00',
+            'material': 'Aventurine',
+            'color': 'Green',
+            'size': 'Medium',
+            'stock': 5,
+        }, format='json')
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(Bracelet.objects.filter(name='Green Aventurine').exists())

@@ -1,6 +1,11 @@
 from rest_framework import viewsets
-from .models import Category, Product
-from .serializers import CategorySerializer, ProductSerializer
+from .models import Bracelet, Category, Product
+from .serializers import BraceletSerializer, CategorySerializer, ProductSerializer
+
+
+class BraceletViewSet(viewsets.ModelViewSet):
+    queryset = Bracelet.objects.all()
+    serializer_class = BraceletSerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

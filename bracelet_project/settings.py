@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
+from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,7 +39,6 @@ def parse_database_url(url):
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-8%kd4z7fqgmjn$*soe)4s3nmoqoqff!_0rfissgp14y17$r)c_')
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('1', 'true', 'yes')
-USE_POSTGRES = os.environ.get('USE_POSTGRES', 'False').lower() in ('1', 'true', 'yes')
 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','mycrystals.quantbots.co']
@@ -95,16 +96,14 @@ if not database_url:
     if config_file.exists():
         database_url = config_file.read_text().strip()
 
-if database_url:
-    parsed_db = parse_database_url(database_url)
-    DATABASES = {'default': parsed_db}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+parsed_db = parse_database_url(database_url)
+if not parsed_db:
+    raise ImproperlyConfigured(
+        'PostgreSQL database configuration is required. Set DATABASE_URL or '
+        'create db/mycrystal.txt with a postgres:// or postgresql:// URL.'
+    )
+
+DATABASES = {'default': parsed_db}
 
 DATABASES['default']['CONN_MAX_AGE'] = 600
 
