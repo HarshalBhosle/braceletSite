@@ -30,6 +30,7 @@ jobs:
           # This only syncs changed files and skips intermediate folders
           echo "Syncing changed files..."
           rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" \
+            --exclude='.env' \
             --exclude='.git/' \
             --exclude='venv/' \
             --exclude='logs/' \
