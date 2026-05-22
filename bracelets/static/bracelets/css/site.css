@@ -211,6 +211,27 @@ body{
   flex:0 0 140px;
 }
 
+.cart-item-row{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+
+.cart-item-image{
+  width:120px;
+  flex:0 0 120px;
+  aspect-ratio:1;
+  overflow:hidden;
+  border-radius:8px;
+  background:#eef2f0;
+}
+
+.cart-item-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
 @media (max-width:991px){
   .form-grid{grid-template-columns:1fr}
   .filter-panel{position:static}
@@ -226,4 +247,6 @@ body{
   .admin-product-row{align-items:flex-start;flex-direction:column}
   .admin-product-image{width:100%;max-width:220px;flex-basis:auto}
   .admin-actions{text-align:left!important}
+  .cart-item-row{align-items:flex-start;flex-direction:column}
+  .cart-item-image{width:100%;max-width:220px;flex-basis:auto}
 }

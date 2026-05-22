@@ -43,7 +43,18 @@
                     </div>
                 </div>
 
-                <a href="mailto:orders@crystalbracelets.com?subject=Order%20{{ bracelet.name|urlencode }}" class="btn btn-primary btn-pill mt-4">Buy now</a>
+                <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                    <form method="post" action="{% url 'add_to_cart' bracelet.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'cart' %}">
+                        <button type="submit" class="btn btn-primary btn-pill">Buy now</button>
+                    </form>
+                    <form method="post" action="{% url 'add_to_cart' bracelet.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'cart' %}">
+                        <button type="submit" class="btn btn-outline-primary btn-pill">Add to cart</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

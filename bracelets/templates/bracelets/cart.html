@@ -1,0 +1,68 @@
+{% extends "bracelets/base.html" %}
+{% load static %}
+
+{% block title %}Cart - Crystal Bracelets{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h1 class="page-heading">Your cart</h1>
+            <p class="text-muted mb-0">Bracelets you have added are saved here while you shop.</p>
+        </div>
+        <a href="{% url 'bracelets_list' %}" class="btn btn-outline-primary btn-pill">Continue shopping</a>
+    </div>
+
+    {% if cart_items %}
+        <div class="row g-4">
+            <div class="col-12 col-lg-8">
+                <div class="d-flex flex-column gap-3">
+                    {% for item in cart_items %}
+                        <div class="card-surface p-3 cart-item-row">
+                            <div class="cart-item-image">
+                                {% if item.bracelet.local_image %}
+                                    <img src="{% static item.bracelet.local_image %}" alt="{{ item.bracelet.name }}">
+                                {% elif item.bracelet.image_url %}
+                                    <img src="{{ item.bracelet.image_url }}" alt="{{ item.bracelet.name }}">
+                                {% elif item.bracelet.image %}
+                                    <img src="{{ item.bracelet.image.url }}" alt="{{ item.bracelet.name }}">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" alt="{{ item.bracelet.name }}">
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1">
+                                <h2 class="h5 mb-1">{{ item.bracelet.name }}</h2>
+                                <p class="text-muted small mb-2">{{ item.bracelet.material }} | {{ item.bracelet.color }}</p>
+                                <div class="fw-semibold">Rs. {{ item.bracelet.price }} x {{ item.quantity }}</div>
+                            </div>
+                            <div class="text-md-end">
+                                <div class="fw-bold mb-2">Rs. {{ item.line_total }}</div>
+                                <form method="post" action="{% url 'remove_from_cart' item.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card-surface p-4">
+                    <h2 class="h5 mb-3">Order summary</h2>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Total</span>
+                        <strong>Rs. {{ cart_total }}</strong>
+                    </div>
+                    <a href="mailto:orders@crystalbracelets.com?subject=Bracelet%20cart%20order" class="btn btn-primary btn-pill w-100">Buy cart</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="card-surface p-5 text-center">
+            <h2 class="h4">Your cart is empty</h2>
+            <p class="text-muted">Add bracelets from the collection to see them here.</p>
+            <a href="{% url 'bracelets_list' %}" class="btn btn-primary btn-pill">Shop collection</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

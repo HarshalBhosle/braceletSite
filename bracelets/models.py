@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class Bracelet(models.Model):
     name = models.CharField(max_length=200)
@@ -54,3 +55,22 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class CartItem(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='cart_items', on_delete=models.CASCADE)
+    bracelet = models.ForeignKey(Bracelet, related_name='cart_items', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def line_total(self):
+        return self.bracelet.price * self.quantity
+
+    def __str__(self):
+        return f'{self.quantity} x {self.bracelet.name}'
+
+    class Meta:
+        unique_together = ('user', 'bracelet')
+        ordering = ['-updated_at']

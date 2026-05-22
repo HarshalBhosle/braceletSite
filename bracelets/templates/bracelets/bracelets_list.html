@@ -128,37 +128,39 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
                     {% for bracelet in bracelets %}
                         <div class="col">
-                            <a href="{% url 'bracelet_detail' bracelet.pk %}" class="text-decoration-none text-reset d-block h-100">
-                                <article class="bracelet-card h-100">
+                            <article class="bracelet-card h-100">
+                                <a href="{% url 'bracelet_detail' bracelet.pk %}" class="text-decoration-none text-reset d-block">
                                     <div class="bracelet-image">
-                                        {% if bracelet.local_image %}
-                                            <img src="{% static bracelet.local_image %}" alt="{{ bracelet.name }}" loading="lazy">
-                                        {% elif bracelet.image_url %}
-                                            <img src="{{ bracelet.image_url }}" alt="{{ bracelet.name }}" loading="lazy">
-                                        {% elif bracelet.image %}
-                                            <img src="{{ bracelet.image.url }}" alt="{{ bracelet.name }}" loading="lazy">
-                                        {% else %}
-                                            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" alt="{{ bracelet.name }}" loading="lazy">
-                                        {% endif %}
+                                            {% if bracelet.local_image %}
+                                                <img src="{% static bracelet.local_image %}" alt="{{ bracelet.name }}" loading="lazy">
+                                            {% elif bracelet.image_url %}
+                                                <img src="{{ bracelet.image_url }}" alt="{{ bracelet.name }}" loading="lazy">
+                                            {% elif bracelet.image %}
+                                                <img src="{{ bracelet.image.url }}" alt="{{ bracelet.name }}" loading="lazy">
+                                            {% else %}
+                                                <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=700" alt="{{ bracelet.name }}" loading="lazy">
+                                            {% endif %}
                                     </div>
-                                    <div class="bracelet-details d-flex flex-column">
+                                </a>
+                                <div class="bracelet-details d-flex flex-column">
+                                    <a href="{% url 'bracelet_detail' bracelet.pk %}" class="text-decoration-none text-reset">
                                         <div>
                                             <h3 class="bracelet-name">{{ bracelet.name }}</h3>
                                             <p class="text-muted small mb-3">{{ bracelet.material }} | {{ bracelet.color }}</p>
                                             <div class="bracelet-price fw-bold mb-3">Rs. {{ bracelet.price }}</div>
                                         </div>
-                                        <div class="mt-auto">
-                                            {% if bracelet.stock > 10 %}
-                                                <span class="product-badge in-stock">In stock</span>
-                                            {% elif bracelet.stock > 0 %}
-                                                <span class="product-badge low-stock">Limited</span>
-                                            {% else %}
-                                                <span class="product-badge out-of-stock">Sold out</span>
-                                            {% endif %}
-                                        </div>
+                                    </a>
+                                    <div class="mt-auto">
+                                        {% if bracelet.stock > 10 %}
+                                            <span class="product-badge in-stock">In stock</span>
+                                        {% elif bracelet.stock > 0 %}
+                                            <span class="product-badge low-stock">Limited</span>
+                                        {% else %}
+                                            <span class="product-badge out-of-stock">Sold out</span>
+                                        {% endif %}
                                     </div>
-                                </article>
-                            </a>
+                                </div>
+                            </article>
                         </div>
                     {% empty %}
                         <div class="col-12">

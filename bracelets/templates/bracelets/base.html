@@ -24,10 +24,14 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'landing' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'bracelets_list' %}">Collection</a></li>
                     {% if request.user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}">Cart</a></li>
+                        {% if request.user.username == 'admin' %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                        {% endif %}
+                        <li class="nav-item"><span class="nav-link fw-semibold">{{ request.user.username }}</span></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'logout_admin' %}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'login_admin' %}">Admin</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login_admin' %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -49,7 +53,7 @@
     <footer class="site-footer mt-5">
         <div class="container text-center py-4">
             <p class="mb-1">&copy; {{ now|date:"Y" }} Crystal Bracelets</p>
-            <p class="small text-muted">Handcrafted pieces | Curated demos | Custom admin portal</p>
+            <p class="small text-muted">Handcrafted pieces | Curated demos | Customer cart</p>
         </div>
     </footer>
 

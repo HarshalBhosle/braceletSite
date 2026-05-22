@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bracelet, Category, Product
+from .models import Bracelet, CartItem, Category, Product
 
 @admin.register(Bracelet)
 class BraceletAdmin(admin.ModelAdmin):
@@ -21,3 +21,10 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'price', 'material', 'color', 'size', 'stock', 'created_at']
     list_filter = ['category', 'material', 'color', 'size']
     search_fields = ['name', 'material', 'color']
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['user', 'bracelet', 'quantity', 'updated_at']
+    list_filter = ['updated_at']
+    search_fields = ['user__username', 'bracelet__name']
