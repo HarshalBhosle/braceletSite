@@ -15,25 +15,12 @@
     --card-grad-1: rgba(255, 255, 255, 0.96);
     --card-grad-2: rgba(229, 250, 248, 0.88);
     --card-edge: rgba(255, 255, 255, 0.72);
-:root{
-  --brand:#345c72;
-  --brand-dark:#213d4c;
-  --accent:#c89b3c;
-  --muted:#667680;
-  --shade:#1f2f37;
-  --page-bg:#f6f7f4;
-  --surface:#ffffff;
-  --border:rgba(31,47,55,0.1);
-  --shadow:0 16px 42px rgba(31,47,55,0.08);
-  --tiffany:#0abab5;
-  --tiffany-deep:#068b87;
-  --ink:#10212a;
-  --ink-soft:#2a4350;
-  --surface-soft:#f8fefd;
-  --card-grad-1:rgba(255,255,255,0.96);
-  --card-grad-2:rgba(229,250,248,0.88);
-  --shadow-soft:0 14px 30px rgba(4,62,78,0.12);
-  --shadow-strong:0 26px 66px rgba(4,62,78,0.24);
+    --brand:#345c72;
+    --brand-dark:#213d4c;
+    --accent:#c89b3c;
+    --shade:#1f2f37;
+    --page-bg:#f6f7f4;
+    --shadow:0 16px 42px rgba(31,47,55,0.08);
 }
 
 * {
