@@ -1,12 +1,12 @@
 {% extends "bracelets/base.html" %}
 {% load static %}
 
-{% block title %}Admin Register — Crystal Bracelets{% endblock %}
+{% block title %}Signup - Crystal Bracelets{% endblock %}
 
 {% block content %}
 <div class="auth-container">
-    <h1 class="h3 mb-1">Admin Registration</h1>
-    <p class="text-muted mb-3">Create your admin account to manage bracelets, update inventory, and keep the homepage curated.</p>
+    <h1 class="h3 mb-1">Signup</h1>
+    <p class="text-muted mb-3">Create your account to add bracelets to your cart and shop the collection.</p>
     <form method="post" novalidate>
         {% csrf_token %}
         {% for field in form %}
@@ -21,7 +21,7 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <button class="btn btn-primary w-100 py-2 btn-pill" type="submit">Register</button>
+        <button class="btn btn-primary w-100 py-2 btn-pill" type="submit">Signup</button>
     </form>
     <div class="text-center text-muted mt-4">
         <p class="mb-1">Already have an account? <a href="{% url 'login_admin' %}">Login here</a></p>

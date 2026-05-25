@@ -9,8 +9,8 @@
         <div class="row align-items-center">
             <div class="col-lg-7">
                 <span class="badge bg-white text-dark rounded-pill mb-3 px-3 py-2">Luxury crystal collection</span>
-                <h1 class="hero-title">Handcrafted crystal bracelets for an elevated everyday look.</h1>
-                <p class="lead text-white-75">Shop elegantly designed pieces with premium stones, expert finishes, and a refined look that feels luxe yet effortless.</p>
+                <h1 class="hero-title">Energy, beauty, and meaning.</h1>
+                <p class="lead text-white-75">Elegant crystal bracelets made to help you feel grounded, protected, and aligned.</p>
                 <a href="{% url 'bracelets_list' %}" class="btn btn-light btn-pill mt-3">Explore the collection</a>
             </div>
             <div class="col-lg-5 d-none d-lg-block">
@@ -26,7 +26,7 @@
     <div class="container">
         <div class="text-center mb-4">
             <h2 class="page-heading">Featured Bracelets</h2>
-            <p class="text-muted">This collection updates automatically when new bracelets are added by admins. Everyone can view the latest pieces without logging in.</p>
+            <p class="text-muted">Explore the latest crystal bracelets and view the details of each piece.</p>
         </div>
 
         {% if bracelets %}
@@ -70,10 +70,45 @@
                     </div>
                 {% endfor %}
             </div>
+{% if bracelets.has_other_pages %}
+             <nav aria-label="Page navigation" class="mt-5">
+                 <ul class="pagination pagination-premium justify-content-center">
+                     {% if bracelets.has_previous %}
+                     <li class="page-item">
+                         <a class="page-link" href="?page={{ bracelets.previous_page_number }}" aria-label="Previous">
+                             <i class="bi bi-chevron-left"></i>
+                         </a>
+                     </li>
+                     {% else %}
+                     <li class="page-item disabled">
+                         <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                     </li>
+                     {% endif %}
+                     {% for num in bracelets.paginator.page_range %}
+                         {% if bracelets.number == num %}
+                         <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                         {% elif num > bracelets.number|add:'-3' and num < bracelets.number|add:'3' %}
+                         <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                         {% endif %}
+                     {% endfor %}
+                     {% if bracelets.has_next %}
+                     <li class="page-item">
+                         <a class="page-link" href="?page={{ bracelets.next_page_number }}" aria-label="Next">
+                             <i class="bi bi-chevron-right"></i>
+                         </a>
+                     </li>
+                     {% else %}
+                     <li class="page-item disabled">
+                         <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                     </li>
+                     {% endif %}
+                 </ul>
+             </nav>
+             {% endif %}
         {% else %}
             <div class="text-center py-5">
-                <p class="lead text-muted">No bracelets have been added yet. Admins can add new bracelets and they will show here automatically.</p>
-                <a href="{% url 'admin_dashboard' %}" class="btn btn-primary btn-pill mt-3">Go to admin dashboard</a>
+                <p class="lead text-muted">No bracelets have been added yet. Please check back soon.</p>
+                <a href="{% url 'bracelets_list' %}" class="btn btn-primary btn-pill mt-3">View collection</a>
             </div>
         {% endif %}
     </div>
